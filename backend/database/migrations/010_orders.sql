@@ -1,0 +1,23 @@
+CREATE TABLE orders (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(32) NOT NULL,
+  customer_id BIGINT UNSIGNED NOT NULL,
+  subtotal DECIMAL(10,2) NOT NULL,
+  shipping_fee DECIMAL(10,2) NOT NULL DEFAULT 0,
+  discount_total DECIMAL(10,2) NOT NULL DEFAULT 0,
+  grand_total DECIMAL(10,2) NOT NULL,
+  payment_method ENUM('cod') NOT NULL DEFAULT 'cod',
+  payment_status ENUM('pending','paid','refunded') NOT NULL DEFAULT 'pending',
+  status ENUM('pending','processing','completed','cancelled','refunded') NOT NULL DEFAULT 'pending',
+  shipping_address_json JSON NULL,
+  customer_notes TEXT NULL,
+  placed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  completed_at TIMESTAMP NULL,
+  cancelled_at TIMESTAMP NULL,
+  cancel_reason VARCHAR(500) NULL,
+  coupon_code VARCHAR(80) NULL,
+  CONSTRAINT fk_order_customer FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE RESTRICT,
+  UNIQUE KEY uq_order_code (code),
+  KEY idx_order_customer (customer_id, placed_at),
+  KEY idx_order_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

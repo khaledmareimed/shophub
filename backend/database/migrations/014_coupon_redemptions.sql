@@ -1,0 +1,12 @@
+CREATE TABLE coupon_redemptions (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  coupon_id BIGINT UNSIGNED NOT NULL,
+  order_id BIGINT UNSIGNED NOT NULL,
+  customer_id BIGINT UNSIGNED NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_cr_coupon FOREIGN KEY (coupon_id) REFERENCES coupons(id) ON DELETE RESTRICT,
+  CONSTRAINT fk_cr_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+  CONSTRAINT fk_cr_customer FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE RESTRICT,
+  UNIQUE KEY uq_cr_coupon_order (coupon_id, order_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

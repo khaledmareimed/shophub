@@ -1,0 +1,16 @@
+CREATE TABLE categories (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  parent_id BIGINT UNSIGNED NULL,
+  slug VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  name_ar VARCHAR(255) NULL,
+  description TEXT NULL,
+  image_path VARCHAR(512) NULL,
+  position INT NOT NULL DEFAULT 0,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_cat_parent FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL,
+  UNIQUE KEY uq_category_slug (slug),
+  KEY idx_cat_parent_active (parent_id, active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

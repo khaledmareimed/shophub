@@ -1,0 +1,28 @@
+# Apache 2.4 — project root
+Options -Indexes -MultiViews
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Send everything else with trailing slash to the matching index.php
+  RewriteRule ^store/?$ store/index.php [L]
+  RewriteRule ^admin/?$ admin/index.php [L]
+  RewriteRule ^seller/?$ seller/index.php [L]
+</IfModule>
+
+# Block access to dotfiles and sensitive extensions
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+<FilesMatch "\.(env|env\.example|sql|md|lock|log|json|sh|ini|dist|test\.php)$">
+  Require all denied
+</FilesMatch>
+
+AddDefaultCharset UTF-8
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>

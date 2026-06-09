@@ -1,0 +1,19 @@
+# Static images only — block PHP & friends from running here.
+Options -Indexes -ExecCGI
+RemoveHandler .php .phtml .phar .pl .py .cgi
+RemoveType .php .phtml .phar
+AddType text/plain .php .phtml .phar .pl .py .cgi
+
+<FilesMatch "\.(php|phtml|phar|pl|py|cgi)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
